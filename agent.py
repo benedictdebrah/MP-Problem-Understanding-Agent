@@ -25,10 +25,10 @@ from assistants import (
 
 
 st.set_page_config(
-    page_title="Research Workflow",
+    page_title="Materials Project chat",
     page_icon=":orange_heart:",
 )
-st.title("AI Research Workflow")
+st.title("Materials Project chat")
 st.markdown("##### :orange_heart: built by [phidata](https://github.com/phidatahq/phidata)")
 
 
@@ -70,7 +70,6 @@ def main() -> None:
     search_exa = st.sidebar.checkbox("Exa Search", value=True)
     search_arxiv = st.sidebar.checkbox("ArXiv Search", value=False)
     search_pubmed = st.sidebar.checkbox("PubMed Search", value=False)
-    search_google_scholar = st.sidebar.checkbox("Google Scholar Search", disabled=True)  # noqa
     use_cache = st.sidebar.toggle("Use Cache", value=False, disabled=True)  # noqa
     num_search_terms = st.sidebar.number_input(
         "Number of Search Terms", value=1, min_value=1, max_value=3, help="This will increase latency."
@@ -78,8 +77,8 @@ def main() -> None:
 
     st.sidebar.markdown("---")
     st.sidebar.markdown("## Trending Topics")
-    if st.sidebar.button("Language Agent Tree Search"):
-        st.session_state["topic"] = "Language Agent Tree Search"
+    if st.sidebar.button("LLMs in Materials Science"):
+        st.session_state["topic"] = "LLMs in Materials Science"
 
     if st.sidebar.button("AI in Healthcare"):
         st.session_state["topic"] = "AI in Healthcare"

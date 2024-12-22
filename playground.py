@@ -9,6 +9,8 @@ from phi.knowledge.langchain import LangChainKnowledgeBase
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 from phi.playground import Playground, serve_playground_app
+from phi.storage.agent.sqlite import SqlAgentStorage
+
 
 
 import os
@@ -37,6 +39,13 @@ retriever = db.as_retriever()
 # -*- Create a knowledge base from the vector store
 knowledge_base = LangChainKnowledgeBase(retriever=retriever)
 
+storage = SqlAgentStorage(
+    # store sessions in the ai.sessions table
+    table_name="agent_sessions",
+    # db_file: Sqlite database file
+    db_file="tmp/data.db",
+)
+
 agent = Agent(
     model=OpenAIChat(id="gpt-4o-mini"),
     knowledge=knowledge_base,
@@ -50,7 +59,10 @@ agent = Agent(
     "If the context is sufficient, use it directly to answer the question concisely.",
     "If the retrieved context is insufficient, draw from your expert knowledge in materials science to provide accurate guidance.",
     "Limit responses to four sentences, focusing on clarity and relevance.",
-    "If you don’t know the answer, be honest and say you don't know."],
+    "Do not provide wrong citations or references.",
+    "If referencing external sources or links, explicitly state that the provided links or references may not work or may not be accurate and encourage users to verify the information.",
+    "If you don’t know the answer, be honest and say you don't know."
+],
 
     search_knowledge=True,
     add_history_to_messages=True,
@@ -59,6 +71,7 @@ agent = Agent(
     show_tool_calls=True,
     markdown=True,
     debug_mode=True,
+    storage=storage,
 )
 
 
