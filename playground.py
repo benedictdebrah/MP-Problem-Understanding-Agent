@@ -1,15 +1,11 @@
-import typer
-from rich.prompt import Prompt
-from rich.pretty import pprint
-from typing import Optional
-from phi.agent import Agent
-from phi.model.openai import OpenAIChat
+from agno.agent import Agent
+from agno.models.openai import OpenAIChat
 
-from phi.knowledge.langchain import LangChainKnowledgeBase
+from agno.knowledge.langchain import LangChainKnowledgeBase
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
-from phi.playground import Playground, serve_playground_app
-from phi.storage.agent.sqlite import SqlAgentStorage
+from agno.playground import Playground, serve_playground_app
+from agno.storage.agent.sqlite import SqliteAgentStorage
 
 
 
@@ -21,7 +17,7 @@ load_dotenv()
 
 # Access the keys directly, as they will already be set in the environment
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-PHI_API_KEY = os.getenv("PHI_API_KEY")
+AGNO_API_KEY = os.getenv("agno_API_KEY")
 
 chroma_db_dir = "./db"
 
@@ -39,7 +35,7 @@ retriever = db.as_retriever()
 # -*- Create a knowledge base from the vector store
 knowledge_base = LangChainKnowledgeBase(retriever=retriever)
 
-storage = SqlAgentStorage(
+storage = SqliteAgentStorage(
     # store sessions in the ai.sessions table
     table_name="agent_sessions",
     # db_file: Sqlite database file
